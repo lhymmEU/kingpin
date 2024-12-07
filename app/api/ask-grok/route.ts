@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
+const XAI_API_KEY = process.env.xAI_API_KEY;
+
 export async function POST(req: NextRequest) {
   const { searchTerm } = await req.json();
 
   const openai = new OpenAI({
-    apiKey: "YOUT_XAI_API_KEY",
+    apiKey: XAI_API_KEY,
     baseURL: "https://api.x.ai/v1",
   });
 
