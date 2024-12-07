@@ -5,6 +5,9 @@ const XAI_API_KEY = process.env.xAI_API_KEY;
 
 export async function POST(req: NextRequest) {
   const { searchTerm } = await req.json();
+  const message_template = {
+    AccountSearch: `Search for X account of the specified user: ${searchTerm}, return nothing but the user's X handle and the company's X handle for which the user is working in this format: [user's name]: [X handle], [company's name]: [X handle].`,
+  };
 
   const openai = new OpenAI({
     apiKey: XAI_API_KEY,
@@ -21,7 +24,7 @@ export async function POST(req: NextRequest) {
       },
       {
         role: "user",
-        content: `Search for X account handle for ${searchTerm}`,
+        content: message_template.AccountSearch,
       },
     ],
   });
