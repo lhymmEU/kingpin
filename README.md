@@ -9,3 +9,10 @@ Investor background check tool for founders.
 - Compile portfolio projects into a list
 - Compile tweets into a list
 - Generate cold email based on the two lists
+
+## Todo List
+- ✅ xAI api integration
+- Search company and personal account using xAI api
+- Find high engagement personal tweets
+- Find company portfolio projects
+- Generate cold email using xAI api

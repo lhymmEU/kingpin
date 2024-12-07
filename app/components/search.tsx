@@ -8,6 +8,16 @@ export function Search({ setSearchResults }: any) {
 
   const handleSearch = async (e: any) => {
     e.preventDefault();
+    const response = await fetch("/api/ask-grok", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ searchTerm: query }),
+    });
+
+    const data = await response.json();
+    console.log(data);
     // Implement actual search logic here
     const mockResults = {
       companyX: { name: "TechCorp", handle: "@techcorp" },
@@ -16,6 +26,7 @@ export function Search({ setSearchResults }: any) {
       tweets: ["Tweet 1", "Tweet 2", "Tweet 3"],
     };
     setSearchResults(mockResults);
+
   };
 
   return (
