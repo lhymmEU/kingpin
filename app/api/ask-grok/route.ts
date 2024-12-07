@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   const { searchTerm } = await req.json();
 
   const openai = new OpenAI({
-    apiKey: "xai-Yfre31fQwwmLZ6zvw5uoFXXsKPUaXkHLNjrJnBZF0G6DmuKiaP1IAKiBiC29PQkRujtCWDoAe0aTPgAx",
+    apiKey: "YOUT_XAI_API_KEY",
     baseURL: "https://api.x.ai/v1",
   });
 
