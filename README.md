@@ -1,5 +1,5 @@
 # kingpin
-Investor background check tool for founders.
+Investor background check tool designed for founders.
 
 ## Features
 - Find company X account
@@ -10,11 +10,12 @@ Investor background check tool for founders.
 - Compile tweets into a list
 - Generate cold email based on the two lists
 
-## Todo List
-- ✅ xAI api integration
-- ✅ Search company and personal account using xAI api
-- Integrate langchain prompt templating
-- Find high engagement personal tweets
-- Find company portfolio projects
-- Groq fast inference integration
-- Generate cold email using xAI api
+## How To Use
+- Clone this repository
+- Get your own xAI api key here (it comes with a $25 free credit): https://docs.x.ai/docs
+- Get your own Groq api key here (Groq, not Grok): https://console.groq.com/keys
+- Create a .env file in your clone repository and store these keys in the following format
+  XAI_API_KEY=YOUR_XAI_API_KEY
+  GROQ_API_KEY=YOUR_GROQ_API_KEY
+- Run `npm install` to install necessary dependencies
+- Run `npm run dev` to use Kingpin
