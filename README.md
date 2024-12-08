@@ -12,7 +12,9 @@ Investor background check tool for founders.
 
 ## Todo List
 - ✅ xAI api integration
-- Search company and personal account using xAI api
+- ✅ Search company and personal account using xAI api
+- Integrate langchain prompt templating
 - Find high engagement personal tweets
 - Find company portfolio projects
+- Groq fast inference integration
 - Generate cold email using xAI api

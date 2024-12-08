@@ -8,6 +8,8 @@ export function Search({ setSearchResults }: any) {
 
   const handleSearch = async (e: any) => {
     e.preventDefault();
+
+    // Turn-off the actual api call to save credits if necessary
     const response = await fetch("/api/ask-grok", {
       method: "POST",
       headers: {
@@ -15,17 +17,15 @@ export function Search({ setSearchResults }: any) {
       },
       body: JSON.stringify({ searchTerm: query }),
     });
-
     const data = await response.json();
     console.log(data);
-    // Implement actual search logic here
-    const mockResults = {
-      companyX: { name: "TechCorp", handle: "@techcorp" },
-      personalX: { name: "John Doe", handle: "@johndoe" },
-      portfolioProjects: ["Project A", "Project B", "Project C"],
-      tweets: ["Tweet 1", "Tweet 2", "Tweet 3"],
-    };
-    setSearchResults(mockResults);
+
+
+    
+    // ----------------------------------------------------------------
+
+    // Mock results
+    setSearchResults(data);
 
   };
 

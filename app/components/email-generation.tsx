@@ -3,24 +3,20 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
-export function EmailGeneration({ compiledData }: { compiledData: any }) {
+export function EmailGeneration({ searchResults }: { searchResults: String }) {
   const [generatedEmail, setGeneratedEmail] = useState('')
 
-  const generateEmail = () => {
+  const generateEmail = async () => {
     // Implement actual email generation logic here
-    const mockEmail = `
-Dear Investor,
-
-I hope this email finds you well. I've been following your work and investments, particularly in ${compiledData.portfolioProjects.join(', ')}.
-
-I noticed your recent tweet: "${compiledData.tweets[0]}", which aligns perfectly with our mission.
-
-I'd love to discuss how we can collaborate. Are you available for a brief call next week?
-
-Best regards,
-[Your Name]
-    `
-    setGeneratedEmail(mockEmail)
+    const response = await fetch('/api/generate-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ searchResults }),
+    });
+    const data = await response.json();
+    setGeneratedEmail(data.result);
   }
 
   return (
