@@ -6,11 +6,9 @@ import { ChatGroq } from "@langchain/groq";
 
 const XAI_API_KEY = process.env.XAI_API_KEY;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const ROAX_DESC =
-  "ROAX is a healthcare startup building on blockchain to facilitate safe and fast health records sharing and streamline the insurance claim process.";
 
 export async function POST(req: NextRequest) {
-  const { searchTerm } = await req.json();
+  const { searchTerm, companyDesc } = await req.json();
 
   // Use xAI for information gathering
   const grok = new ChatXAI({
@@ -63,7 +61,7 @@ export async function POST(req: NextRequest) {
   // Grok will return a string that can be parsed by groq
   const grokResult = await grokChain.invoke({
     investor: searchTerm,
-    project_desc: ROAX_DESC,
+    project_desc: companyDesc,
   });
 
   // Prompt for groq to format the information get from grok into a JSON object

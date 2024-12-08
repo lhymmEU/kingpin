@@ -5,8 +5,9 @@ import { SearchIcon } from "lucide-react";
 
 export function Search({ setSearchResults }: any) {
   const [query, setQuery] = useState("");
+  const [companyDesc, setCompanyDesc] = useState("");
 
-  const handleSearch = async (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     // Turn-off the actual api call to save credits if necessary
@@ -15,27 +16,32 @@ export function Search({ setSearchResults }: any) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ searchTerm: query }),
+      body: JSON.stringify({ searchTerm: query, companyDesc: companyDesc }),
     });
     const data = await response.json();
     console.log(data);
-
-
-    
-    // ----------------------------------------------------------------
-
-    // Mock results
     setSearchResults(data);
+  };
 
+  const handleCompanyDesc = async (e: any) => {
+    e.preventDefault();
+    setCompanyDesc(e.target.value);
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex space-x-2">
+    <form onSubmit={handleSubmit} className="flex space-x-2">
       <Input
         type="text"
-        placeholder="Enter company or person name"
+        placeholder="Enter investor's name"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        className="flex-grow"
+      />
+      <Input
+        type="text"
+        placeholder="Enter company description"
+        value={companyDesc}
+        onChange={handleCompanyDesc}
         className="flex-grow"
       />
       <Button type="submit">

@@ -14,11 +14,17 @@ export async function POST(request: NextRequest) {
     temperature: 0,
   });
 
-  const groqParserSystemMsg =
-    "You are a cold email assistant to help founders write cold emails to investors based on the information provided.";
+  const groqSystemMsg =
+    `You are a cold email assistant to help founders write cold emails to investors based on the information provided.
+    The generated cold mail needs to conform to the following requirements:
+    1. It should be super concise.
+    2. Do not do a full product introduction.
+    3. Only highlight the part with the best chance to pique investor interest.
+    4. The ultimate goal is to get a intro call opportunity with the investor.
+    `;
 
   const groqPrompt = ChatPromptTemplate.fromMessages([
-    ["system", groqParserSystemMsg],
+    ["system", groqSystemMsg],
     ["user", `{searchResults}`],
   ]);
 
