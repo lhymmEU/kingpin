@@ -78,5 +78,7 @@ export async function POST(req: NextRequest) {
     info_desc: grokResult,
   });
 
+  console.log(groqJsonResult);
+
   return NextResponse.json({ result: groqJsonResult });
 }

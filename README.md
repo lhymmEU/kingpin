@@ -8,7 +8,7 @@ Investor background check tool designed for founders.
 - Find personal tweets
 - Compile portfolio projects into a list
 - Compile tweets into a list
-- Generate cold email based on the two lists
+- Generate report based on the two lists
 
 ## How To Use
 - Clone this repository
