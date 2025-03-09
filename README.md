@@ -14,15 +14,6 @@ KingPin helps startups vet potential investors through:
 - **Data-Driven** - Make decisions based on concrete data and their track records
 - **Email Generation** - Automatically generate outreach emails based on research findings
 
-## 🎨 UI Design
-
-This application features a clean, minimalistic design that includes:
-
-- Horizontal layout with content on the left and feature cards on the right
-- Subtle microinteractions for an enhanced user experience
-- Minimalistic feature cards with clear visual hierarchy
-- Responsive design for all device sizes
-
 ## 🔧 Tech Stack
 
 - **Next.js** - React framework for production
@@ -45,26 +36,6 @@ npm run dev
 ```
 
 3. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
-
-## 📝 Implementation Details
-
-### Minimalistic Feature Cards
-
-The landing page features clean, minimalistic cards for each feature:
-
-- Simple iconography to represent each feature
-- Subtle hover animations for better user interaction
-- Clean typography with proper hierarchy
-- Carefully balanced whitespace
-
-### Horizontal Layout
-
-The landing page uses a horizontal layout that:
-
-- Places key messaging and call-to-action on the left
-- Organizes feature cards in a grid on the right
-- Creates a natural reading flow from left to right
-- Adapts to smaller screens by stacking content
 
 ## 📄 License
 
