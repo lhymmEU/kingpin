@@ -1,45 +1,111 @@
 import { motion } from 'framer-motion'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Badge } from "@/components/ui/badge"
 import { 
-  Trophy, 
-  Briefcase, 
-  Twitter, 
-  Linkedin, 
-  Globe, 
-  TrendingUp,
-  Users,
-  AlertCircle
+  Type,
+  Hash,
+  Binary,
+  Braces,
+  List
 } from 'lucide-react'
 
-interface SocialAccount {
-  name: string;
-  handle: string;
+interface DataNodeProps {
+  data: any;
+  label?: string;
 }
 
-interface SearchResults {
-  companyX: SocialAccount;
-  personalX: SocialAccount;
-  portfolioProjects: string[];
-  tweets: string[];
-}
+function DataNode({ data, label }: DataNodeProps) {
+  const getDataType = (value: any): string => {
+    if (Array.isArray(value)) return 'array';
+    if (value === null) return 'null';
+    return typeof value;
+  };
 
-function isValidSocialAccount(obj: any): obj is SocialAccount {
-  return obj 
-    && typeof obj === 'object'
-    && typeof obj.name === 'string'
-    && typeof obj.handle === 'string';
-}
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'string': return <Type className="h-4 w-4 text-blue-500" />;
+      case 'number': return <Hash className="h-4 w-4 text-blue-500" />;
+      case 'boolean': return <Binary className="h-4 w-4 text-blue-500" />;
+      case 'object': return <Braces className="h-4 w-4 text-blue-500" />;
+      case 'array': return <List className="h-4 w-4 text-blue-500" />;
+      default: return null;
+    }
+  };
 
-function isValidSearchResults(obj: any): obj is SearchResults {
-  return obj 
-    && typeof obj === 'object'
-    && isValidSocialAccount(obj.companyX)
-    && isValidSocialAccount(obj.personalX)
-    && Array.isArray(obj.portfolioProjects)
-    && obj.portfolioProjects.every((item: any) => typeof item === 'string')
-    && Array.isArray(obj.tweets)
-    && obj.tweets.every((item: any) => typeof item === 'string');
+  const renderValue = (value: any, type: string) => {
+    if (value === null) return <span className="text-gray-500 dark:text-gray-400">null</span>;
+    if (type === 'string') return <span className="text-blue-600 dark:text-blue-400">"{value}"</span>;
+    if (type === 'number') return <span className="text-blue-600 dark:text-blue-400">{value}</span>;
+    if (type === 'boolean') return <span className="text-blue-600 dark:text-blue-400">{value.toString()}</span>;
+    return String(value);
+  };
+
+  const renderContent = () => {
+    const type = getDataType(data);
+    
+    if (type === 'object' && data !== null) {
+      return (
+        <div className="space-y-3">
+          {Object.entries(data).map(([key, value], index) => (
+            <motion.div
+              key={key}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: index * 0.05 }}
+              className="pl-4 border-l border-gray-200 dark:border-gray-700"
+            >
+              <DataNode data={value} label={key} />
+            </motion.div>
+          ))}
+        </div>
+      );
+    }
+
+    if (type === 'array') {
+      return (
+        <div className="space-y-3">
+          {data.map((item: any, index: number) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: index * 0.05 }}
+              className="pl-4 border-l border-gray-200 dark:border-gray-700"
+            >
+              <DataNode data={item} label={`[${index}]`} />
+            </motion.div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div className="pl-4">
+        {renderValue(data, type)}
+      </div>
+    );
+  };
+
+  const iconType = getDataType(data);
+  const isExpandable = iconType === 'object' || iconType === 'array';
+
+  return (
+    <div className="rounded-lg">
+      <div className="flex items-center space-x-2">
+        {getTypeIcon(iconType)}
+        {label && (
+          <span className="font-medium text-gray-900 dark:text-gray-100">
+            {label}:
+          </span>
+        )}
+        {!isExpandable && renderContent()}
+      </div>
+      {isExpandable && (
+        <div className="mt-2">
+          {renderContent()}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function Results({ 
@@ -47,50 +113,29 @@ export function Results({
 }: { 
   searchResults: string | { result: any };
 }) {
-  let results: SearchResults | null = null;
-  let parseError = false;
+  let parsedData: any = null;
   
   try {
-    // Parse the input based on its type
-    const parsedData = typeof searchResults === 'string' 
+    parsedData = typeof searchResults === 'string' 
       ? JSON.parse(searchResults)
       : searchResults.result;
-    
-    // Validate the parsed data structure
-    if (isValidSearchResults(parsedData)) {
-      results = parsedData;
-    } else {
-      parseError = true;
-      console.warn('Invalid data structure:', parsedData);
-    }
   } catch (e) {
-    parseError = true;
     console.warn('Parse error:', e);
-  }
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
-
-  if (parseError) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <AlertCircle className="h-5 w-5 text-primary" />
-              <span>Raw Results</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="whitespace-pre-wrap font-mono text-sm bg-muted p-4 rounded-lg">
-              {typeof searchResults === 'string' 
-                ? searchResults 
-                : JSON.stringify(searchResults, null, 2)}
+        <Card className="bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700">
+          <CardContent className="pt-6">
+            <div className="text-red-600 dark:text-red-400">
+              Failed to parse the search results. Raw data:
+              <div className="mt-2 whitespace-pre-wrap font-mono text-sm bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
+                {typeof searchResults === 'string' 
+                  ? searchResults 
+                  : JSON.stringify(searchResults, null, 2)}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -99,118 +144,25 @@ export function Results({
   }
 
   return (
-    <motion.div 
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-      initial="hidden"
-      animate="visible"
-      variants={{
-        visible: {
-          transition: {
-            staggerChildren: 0.1
-          }
-        }
-      }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="h-full"
     >
-      {/* Recent Tweets */}
-      <motion.div variants={cardVariants}>
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Twitter className="h-5 w-5 text-primary" />
-              <span>Recent Tweets</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {results?.tweets?.map((tweet: string, index: number) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-start space-x-3 p-3 bg-muted rounded-lg"
-              >
-                <p className="text-sm">{tweet}</p>
-              </motion.div>
-            ))}
-            {(!results?.tweets || results.tweets.length === 0) && (
-              <div className="text-sm text-muted-foreground p-3">
-                No tweets available
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Social Presence */}
-      <motion.div variants={cardVariants}>
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Users className="h-5 w-5 text-primary" />
-              <span>Social Presence</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {results?.personalX && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center space-x-3 p-3 bg-muted rounded-lg"
-              >
-                <Twitter className="h-5 w-5 text-[#1DA1F2]" />
-                <span className="text-sm">Personal: @{results.personalX.handle}</span>
-              </motion.div>
-            )}
-            {results?.companyX && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center space-x-3 p-3 bg-muted rounded-lg"
-              >
-                <Twitter className="h-5 w-5 text-[#1DA1F2]" />
-                <span className="text-sm">Company: @{results.companyX.handle}</span>
-              </motion.div>
-            )}
-            {(!results?.personalX && !results?.companyX) && (
-              <div className="text-sm text-muted-foreground p-3">
-                No social accounts found
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Portfolio Projects */}
-      <motion.div variants={cardVariants}>
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              <span>Portfolio Projects</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {results?.portfolioProjects?.map((project: string, index: number) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Badge variant="secondary">{project}</Badge>
-                </motion.div>
-              ))}
-              {(!results?.portfolioProjects || results.portfolioProjects.length === 0) && (
-                <div className="text-sm text-muted-foreground">
-                  No portfolio projects found
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+      <Card className="bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 h-full">
+        <CardHeader className="border-b border-gray-100 dark:border-gray-700">
+          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            Investor Analysis Results
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="space-y-4">
+            <DataNode data={parsedData} />
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>
-  )
+  );
 }
 

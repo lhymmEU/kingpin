@@ -13,13 +13,13 @@ export async function POST(req: NextRequest) {
   // Use xAI for information gathering
   const grok = new ChatXAI({
     apiKey: XAI_API_KEY,
-    model: "grok-beta",
+    model: "grok-2-1212",
   });
 
   // Use Groq for information processing
   const model = new ChatGroq({
     apiKey: GROQ_API_KEY,
-    model: "mixtral-8x7b-32768",
+    model: "llama-3.3-70b-versatile",
     temperature: 0
   });
 

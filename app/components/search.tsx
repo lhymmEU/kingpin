@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
@@ -31,77 +33,74 @@ export function Search({ setSearchResults }: any) {
     }
   };
 
-  const handleCompanyDesc = async (e: any) => {
-    e.preventDefault();
-    setCompanyDesc(e.target.value);
-  };
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">Find Your Next Investor</CardTitle>
+    <Card className="bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700">
+      <CardHeader className="border-b border-gray-100 dark:border-gray-700">
+        <CardTitle className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Research Investor
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center space-x-2 bg-muted p-3 rounded-lg">
-              <User className="h-5 w-5 text-muted-foreground" />
+      <CardContent className="pt-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Investor Name
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
               <Input
                 type="text"
                 placeholder="Enter investor's name"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="pl-10 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400"
               />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-          >
-            <div className="flex items-center space-x-2 bg-muted p-3 rounded-lg">
-              <Building2 className="h-5 w-5 text-muted-foreground" />
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Company Description
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <Building2 className="h-5 w-5 text-gray-400" />
+              </div>
               <Input
                 type="text"
                 placeholder="Tell us about your company"
                 value={companyDesc}
-                onChange={handleCompanyDesc}
-                className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                onChange={(e) => setCompanyDesc(e.target.value)}
+                className="pl-10 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400"
               />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            className="flex justify-end"
+          <Button
+            type="submit"
+            disabled={isLoading || !query.trim() || !companyDesc.trim()}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
-            <Button
-              type="submit"
-              size="lg"
-              disabled={isLoading || !query.trim() || !companyDesc.trim()}
-              className="w-full sm:w-auto"
-            >
-              {isLoading ? (
+            {isLoading ? (
+              <>
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="mr-2"
                 >
-                  <SearchIcon className="mr-2 h-4 w-4" />
+                  <SearchIcon className="h-4 w-4" />
                 </motion.div>
-              ) : (
+                Searching...
+              </>
+            ) : (
+              <>
                 <SearchIcon className="mr-2 h-4 w-4" />
-              )}
-              {isLoading ? "Searching..." : "Search"}
-            </Button>
-          </motion.div>
+                Search
+              </>
+            )}
+          </Button>
         </form>
       </CardContent>
     </Card>
