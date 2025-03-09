@@ -21,6 +21,13 @@ KingPin helps startups vet potential investors through:
 - **TailwindCSS** - For styling
 - **Framer Motion** - For subtle animations and microinteractions
 
+## TODO List
+
+- **Improved Prompt Engineering** - Improve prompts for grok and groq to get better result back
+- **Background Check** - Add models and prompts for investor background check, focusing on notable headlines
+- **Investor Map** - Allow users to retrieve a list of potential investors based on their project description
+- **Reach Out** - Generate reach out email suggestions on-demand
+
 ## 🏃‍♂️ Running the Project
 
 1. Install dependencies:
